@@ -1,1 +1,6 @@
 /target/
+.idea/
+.idea/*.xml
+/.setting
+.gitignore
+.campusrental.iml
