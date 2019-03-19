@@ -4,4 +4,6 @@ import com.campus.rental.domain.Student;
 
 public interface StudentService {
     Student login(String userName, String password);
+
+    Student getStudentInfo(String id);
 }

@@ -1,5 +1,4 @@
 <%@ page import="com.campus.rental.domain.Good" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -7,6 +6,7 @@
 <head>
     <title>首页</title>
     <link type="text/css" rel="stylesheet" href="${ctx}/resource/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${ctx}/resource/css3-3d-image-switch/css/style.css">
 </head>
 <body style="background: url('${ctx}/resource/imgs/Sports.png')">
 <nav class="navbar navbar-default">
@@ -19,7 +19,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">校园二手租赁平台</a>
+            <a class="navbar-brand" href="${ctx}/">校园二手租赁平台</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
@@ -28,14 +28,18 @@
                         if (session.getAttribute("id") == null) {
                     %>
                     <div class="btn-group" role="group" aria-label="...">
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal" data-target="#myModal">登录</a>
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal" data-target="#myModal2">注册</a>
+                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
+                           data-target="#myModal">登录</a>
+                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
+                           data-target="#myModal2">注册</a>
                     </div>
                     <%
                     } else {
                     %>
                     <div class="btn-group" role="group" aria-label="...">
-                        <a href="${ctx}/student?id=<%=session.getAttribute("id")%>" type="button" class="btn btn-link navbar-btn"><%=session.getAttribute("realName")%></a>
+                        <a href="${ctx}/student?id=<%=session.getAttribute("id")%>" type="button"
+                           class="btn btn-link navbar-btn"><%=session.getAttribute("realName")%>
+                        </a>
                         <a href="${ctx}/logout" class="btn btn-link navbar-btn">注销</a>
                     </div>
                     <%
@@ -46,30 +50,64 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="container">
-    <div class="row">
-        <%
-            List<Good> programmes = (List<Good>) request.getAttribute("goods");
-            for (Good programme : programmes) {
-                int desLength = programme.getContent().length();
-                String img = programme.getImg() == null || programme.getImg().equals("") ? "" : programme.getImg().split(",")[0];
-                String des = desLength > 13 ? programme.getContent().substring(0, 12) : programme.getContent();
-        %>
-        <a href="${ctx}/good/item?id=<%=programme.getId()%>">
-            <div class="col-sm-6 col-md-3">
-                <div class="thumbnail">
-                    <img style="width: 100%; height: auto;" src="${ctx}/resource/uploadImg/<%=img%>" class="productImg" alt="<%=img%>">
-                    <div class="caption" style="padding-bottom: 0;">
-                        <h3 style="margin-top: 0;">¥<%=programme.getPrice()%></h3>
-                        <p style="line-height: 8px;"><%=programme.getTitle()%></p>
-                        <p style="line-height: 8px;"><%=des%>...</p>
+<div class="container-fluid" style="margin: 0; padding: 0;">
+    <%
+        Good programme = (Good) request.getAttribute("good");
+    %>
+    <div class="gallery-container">
+        <div class="gallery">
+            <%
+                String[] imgs = programme.getImg().split(",");
+                for (String img : imgs) {
+            %>
+            <div class="frame">
+                <img class="image" src="/resource/uploadImg/<%=img%>">
+                <div class="info">Pumpernickel</div>
+            </div>
+            <%
+                }
+            %>
+        </div>
+    </div>
+    <div class="container">
+        <div class="media">
+            <div class="media-body">
+                <h1 class="media-heading"><%=programme.getTitle()%>
+                </h1>
+                <h4><%=programme.getContent()%>
+                </h4>
+                <h1>¥<%=programme.getPrice()%> / <%=programme.getTimeUnit() == 0? "小时" : programme.getTimeUnit() == 1? "天" : programme.getTimeUnit() == 2? "周" : programme.getTimeUnit() == 3? "月" : "年"%>
+                </h1>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">租 !</button>
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel3">租 !</h4>
+                            </div>
+                            <input type="hidden" name="goodId" id="goodId" value="<%=programme.getId()%>">
+                            <input type="hidden" name="fromId" id="fromId" value="<%=programme.getStudentId()%>">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="rentLast">租多久</label>
+                                    <input type="text" name="rentLast" class="form-control" style="width: 100px;" id="rentLast"
+                                           value="1">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button class="btn btn-success" id="tradeSubmit"
+                                        onclick="rentIt('<%=programme.getId()%>')">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </a>
-        <%
-            }
-        %>
+        </div>
     </div>
 </div>
 <!-- Modal -->
@@ -142,8 +180,33 @@
         </form>
     </div>
 </div>
+<script src="${ctx}/resource/css3-3d-image-switch/js/index.js"></script>
 <script src="${ctx}/resource/js/jquery-3.2.1.min.js"></script>
 <script src="${ctx}/resource/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<!-- <script src="${ctx}/resource/js/canvas-nest.js"></script> -->
+<script>
+    function rentIt(id) {
+        $.ajax({
+            url : '${ctx}/trade/create',
+            type : 'post',
+            dataType : 'json',
+            data : {
+                "goodId": id,
+                "fromId": $("#fromId").val(),
+                "rentLast": $("#rentLast").val()
+            },
+            contentType:"application/x-www-form-urlencoded; charset=utf-8",
+            success : function(data) {
+                console.log(data);
+                if (data.code === 1) {
+                    alert("租到啦 !");
+                    $("#myModal1").modal('hide');
+                    window.location.href = "/trade/item?id=" + data.data.id
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -24,4 +24,9 @@ public class StudentServiceImpl implements StudentService {
         }
         return null;
     }
+
+    @Override
+    public Student getStudentInfo(String id) {
+        return studentDao.selectStudentById(id);
+    }
 }

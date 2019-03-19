@@ -19,7 +19,8 @@ public class Good {
     private double price;
     private int timeUnit; // 0：小时  1：天  2：周  3：月  4：年
     private Date createTIme;
-    private String userId;
+    private int state;
+    private String studentId;
 
     public String getId() {
         return id;
@@ -125,12 +126,20 @@ public class Good {
         this.createTIme = createTIme;
     }
 
-    public String getUserId() {
-        return userId;
+    public int getState() {
+        return state;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     @Override
@@ -149,7 +158,8 @@ public class Good {
                 ", price=" + price +
                 ", timeUnit=" + timeUnit +
                 ", createTIme=" + createTIme +
-                ", userId='" + userId + '\'' +
+                ", state=" + state +
+                ", studentId='" + studentId + '\'' +
                 '}';
     }
 }

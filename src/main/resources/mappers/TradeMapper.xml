@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.rental.dao.TradeDao">
+    <resultMap id="tradeMap" type="com.campus.rental.domain.Trade">
+        <result column="id" property="id"/>
+        <result column="good_id" property="goodId"/>
+        <result column="from_id" property="fromId"/>
+        <result column="to_id" property="toId"/>
+        <result column="rent_time" property="rentTime"/>
+        <result column="total" property="total"/>
+        <result column="rent_last" property="rentLast"/>
+    </resultMap>
+    <sql id="base_column">
+        id, <include refid="base_column_noid"/>
+    </sql>
+    <sql id="base_column_noid">
+        good_id, from_id, to_id, rent_time, total, rent_last
+    </sql>
+
+    <insert id="insertTrade" parameterType="com.campus.rental.domain.Trade" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into trade(<include refid="base_column_noid"/>)
+        values
+        (#{goodId}, #{fromId}, #{toId}, #{rentTime}, #{total}, #{rentLast});
+    </insert>
+
+    <delete id="deleteTradeById">
+        delete from trade where id=#{id}
+    </delete>
+
+    <select id="selectTradeById" resultMap="tradeMap">
+        select
+        <include refid="base_column"/>
+        from trade where id=#{id};
+    </select>
+
+    <select id="selectAllTrades" resultMap="tradeMap">
+        select
+        <include refid="base_column"/>
+        from trade;
+    </select>
+
+    <select id="selectTradesByFromStudentId" resultMap="tradeMap">
+        select <include refid="base_column"/>
+        from trade where from_id=#{fromId};
+    </select>
+
+    <select id="selectTradesByToStudentId" resultMap="tradeMap">
+        select <include refid="base_column"/>
+        from trade where to_id=#{toId};
+    </select>
+</mapper>

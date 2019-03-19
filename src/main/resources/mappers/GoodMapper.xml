@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.rental.dao.GoodDao">
+    <resultMap id="goodMap" type="com.campus.rental.domain.Good">
+        <result column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="old" property="old"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="name" property="name"/>
+        <result column="img" property="img"/>
+        <result column="phone" property="phone"/>
+        <result column="we_chat" property="weChat"/>
+        <result column="qq" property="qq"/>
+        <result column="price" property="price"/>
+        <result column="time_unit" property="timeUnit"/>
+        <result column="create_time" property="createTIme"/>
+        <result column="state" property="state"/>
+        <result column="student_id" property="studentId"/>
+    </resultMap>
+    <sql id="base_column">
+        id, <include refid="base_column_noid"/>
+    </sql>
+    <sql id="base_column_noid">
+        type, old, title, content, name, img, phone, we_chat, qq, price, time_unit, create_time, state, student_id
+    </sql>
+
+    <insert id="insertGood" parameterType="com.campus.rental.domain.Good" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into good(<include refid="base_column_noid"/>)
+        values
+        (#{type}, #{old}, #{title}, #{content}, #{name}, #{img}, #{phone}, #{weChat}, #{qq}, #{price}, #{timeUnit}, #{createTIme}, #{state}, #{studentId});
+    </insert>
+
+    <delete id="deleteGoodById">
+        delete from good where id=#{id}
+    </delete>
+
+    <delete id="deleteGoodsByStudentId">
+        delete from good where student_id=#{studentId}
+    </delete>
+
+    <select id="selectGoodById" resultMap="goodMap">
+        select
+        <include refid="base_column"/>
+        from good where id=#{id};
+    </select>
+
+    <select id="selectAllGoods" resultMap="goodMap">
+        select
+        <include refid="base_column"/>
+        from good;
+    </select>
+
+    <select id="selectAllAllowedGoods" resultMap="goodMap">
+        select
+        <include refid="base_column"/>
+        from good where state=1;
+    </select>
+
+    <select id="selectGoodsByStudentId" resultMap="goodMap">
+        select
+        <include refid="base_column"/>
+        from good where student_id=#{studentId};
+    </select>
+</mapper>

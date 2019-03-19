@@ -13,9 +13,34 @@
         <result column="password" property="password"/>
     </resultMap>
     <sql id="base_column">
-        id, stu_num, real_name, phone, wechat, qq, password
+        id, <include refid="base_column_noid"/>
     </sql>
+    <sql id="base_column_noid">
+        stu_num, real_name, phone, wechat, qq, password
+    </sql>
+    <select id="selectStudents" resultMap="studentMap">
+        select <include refid="base_column"/> from student;
+    </select>
+    <select id="selectStudentById" resultMap="studentMap">
+        select <include refid="base_column"/> from student where id=#{stuNum};
+    </select>
     <select id="selectStudentByStuNum" resultMap="studentMap">
         select <include refid="base_column"/> from student where stu_num=#{stuNum};
     </select>
+    <insert id="insertStudent" parameterType="com.campus.rental.domain.Student" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into student(<include refid="base_column_noid"/>) values (
+        #{stuNum},
+        #{realName},
+        #{phone},
+        #{weChat},
+        #{qq},
+        #{password}
+        )
+    </insert>
+    <delete id="deleteStudent">
+        delete from student where id=#{id}
+    </delete>
+    <update id="updateStudent" parameterType="com.campus.rental.domain.Student">
+        update student set phone=#{phone}, wechat=#{weChat}, qq=#{qq}, password=#{password} where id=#{id}
+    </update>
 </mapper>
