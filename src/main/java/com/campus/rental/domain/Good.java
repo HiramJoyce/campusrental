@@ -18,7 +18,7 @@ public class Good {
     private String qq;
     private double price;
     private int timeUnit; // 0：小时  1：天  2：周  3：月  4：年
-    private Date createTIme;
+    private Date createTime;
     private int state;
     private String studentId;
 
@@ -118,12 +118,12 @@ public class Good {
         this.timeUnit = timeUnit;
     }
 
-    public Date getCreateTIme() {
-        return createTIme;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateTIme(Date createTIme) {
-        this.createTIme = createTIme;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public int getState() {
@@ -157,7 +157,7 @@ public class Good {
                 ", qq='" + qq + '\'' +
                 ", price=" + price +
                 ", timeUnit=" + timeUnit +
-                ", createTIme=" + createTIme +
+                ", createTime=" + createTime +
                 ", state=" + state +
                 ", studentId='" + studentId + '\'' +
                 '}';

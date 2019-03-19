@@ -7,6 +7,8 @@ import com.campus.rental.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author hiram 2019年03月18日 23:25
  */
@@ -28,5 +30,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentInfo(String id) {
         return studentDao.selectStudentById(id);
+    }
+
+    @Override
+    public List<Student> getAllStudent() {
+        return studentDao.selectStudents();
+    }
+
+    @Override
+    public void deleteById(String id) {
+        studentDao.deleteStudent(id);
+    }
+
+    @Override
+    public Student updateStudentAll(Student student) {
+        return studentDao.updateStudentAll(student) > 0 ? student : null;
+    }
+
+    @Override
+    public Student addStudent(Student student) {
+        return studentDao.insertStudent(student) > 0 ? student : null;
     }
 }

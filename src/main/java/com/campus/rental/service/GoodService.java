@@ -15,4 +15,5 @@ public interface GoodService {
     Result deleteGood(String id);
     int deleteGoodsByStudentId(String studentId);
     List<Good> searchWord(String word);
+    int setGoodState(String id, String state);
 }

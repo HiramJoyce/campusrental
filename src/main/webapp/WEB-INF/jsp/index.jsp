@@ -28,14 +28,19 @@
                         if (session.getAttribute("id") == null) {
                     %>
                     <div class="btn-group" role="group" aria-label="...">
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal" data-target="#myModal">登录</a>
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal" data-target="#myModal2">注册</a>
+                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
+                           data-target="#myModal">登录</a>
+                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
+                           data-target="#myModal2">注册</a>
                     </div>
                     <%
                     } else {
                     %>
                     <div class="btn-group" role="group" aria-label="...">
-                        <a href="${ctx}/student?id=<%=session.getAttribute("id")%>" type="button" class="btn btn-link navbar-btn"><%=session.getAttribute("realName")%></a>
+                        <a href="${ctx}/<%=session.getAttribute("role")%>?id=<%=session.getAttribute("id")%>"
+                           type="button"
+                           class="btn btn-link navbar-btn"><%=session.getAttribute("realName")%>
+                        </a>
                         <a href="${ctx}/logout" class="btn btn-link navbar-btn">注销</a>
                     </div>
                     <%
@@ -47,6 +52,22 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
+    <div style="margin: auto; width: 350px;">
+        <c:if test="${message != null}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong> ${message}
+            </div>
+        </c:if>
+        <c:if test="${error != null}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>Error!</strong> ${error}
+            </div>
+        </c:if>
+    </div>
     <div class="row">
         <%
             List<Good> programmes = (List<Good>) request.getAttribute("goods");
@@ -58,10 +79,23 @@
         <a href="${ctx}/good/item?id=<%=programme.getId()%>">
             <div class="col-sm-6 col-md-3">
                 <div class="thumbnail">
-                    <img style="width: 100%; height: auto;" src="${ctx}/resource/uploadImg/<%=img%>" class="productImg" alt="<%=img%>">
+                    <%
+                        if (img == null || img.equals("")) {
+                    %>
+                    <div style="width: 100%;"></div>
+                    <%
+                    } else {
+                    %>
+                    <img style="width: 100%; height: auto;" src="${ctx}/resource/uploadImg/<%=img%>" class="productImg"
+                         alt="<%=img%>">
+                    <%
+                        }
+                    %>
                     <div class="caption" style="padding-bottom: 0;">
-                        <h3 style="margin-top: 0;">¥<%=programme.getPrice()%></h3>
-                        <p style="line-height: 8px;"><%=programme.getTitle()%></p>
+                        <h3 style="margin-top: 0;">¥<%=programme.getPrice()%>
+                        </h3>
+                        <p style="line-height: 8px;"><%=programme.getTitle()%>
+                        </p>
                         <p style="line-height: 8px;"><%=des%>...</p>
                     </div>
                 </div>
@@ -72,6 +106,7 @@
         %>
     </div>
 </div>
+<div style="position: fixed; bottom: 0; text-align: center; width: 100%;"><a href="${ctx}/admin/login">管理员登录</a></div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-sm" role="document">

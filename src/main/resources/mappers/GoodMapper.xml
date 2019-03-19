@@ -16,7 +16,7 @@
         <result column="qq" property="qq"/>
         <result column="price" property="price"/>
         <result column="time_unit" property="timeUnit"/>
-        <result column="create_time" property="createTIme"/>
+        <result column="create_time" property="createTime"/>
         <result column="state" property="state"/>
         <result column="student_id" property="studentId"/>
     </resultMap>
@@ -30,7 +30,7 @@
     <insert id="insertGood" parameterType="com.campus.rental.domain.Good" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into good(<include refid="base_column_noid"/>)
         values
-        (#{type}, #{old}, #{title}, #{content}, #{name}, #{img}, #{phone}, #{weChat}, #{qq}, #{price}, #{timeUnit}, #{createTIme}, #{state}, #{studentId});
+        (#{type}, #{old}, #{title}, #{content}, #{name}, #{img}, #{phone}, #{weChat}, #{qq}, #{price}, #{timeUnit}, #{createTime}, #{state}, #{studentId});
     </insert>
 
     <delete id="deleteGoodById">
@@ -50,7 +50,7 @@
     <select id="selectAllGoods" resultMap="goodMap">
         select
         <include refid="base_column"/>
-        from good;
+        from good ORDER by state;
     </select>
 
     <select id="selectAllAllowedGoods" resultMap="goodMap">
@@ -64,4 +64,8 @@
         <include refid="base_column"/>
         from good where student_id=#{studentId};
     </select>
+
+    <update id="setGoodState">
+        update good set state=#{state} where id=#{id}
+    </update>
 </mapper>

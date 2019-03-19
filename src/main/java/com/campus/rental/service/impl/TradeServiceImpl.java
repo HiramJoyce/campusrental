@@ -40,7 +40,12 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public Result getAllTrades() {
-        return ResultUtil.success(tradeDao.selectAllTrades());
+    public List<Trade> getAllTrades() {
+        return tradeDao.selectAllTrades();
+    }
+
+    @Override
+    public int deleteTradeById(String id) {
+        return tradeDao.deleteTradeById(id);
     }
 }

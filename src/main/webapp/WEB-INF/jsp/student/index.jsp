@@ -54,6 +54,22 @@
     </div><!-- /.container-fluid -->
 </nav>
 <div class="container">
+    <div style="margin: auto; width: 350px;">
+        <c:if test="${message != null}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong> ${message}
+            </div>
+        </c:if>
+        <c:if test="${error != null}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>Error!</strong> ${error}
+            </div>
+        </c:if>
+    </div>
     <% Student merchant = (Student) request.getAttribute("student"); %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" id="myTabs">
@@ -66,17 +82,19 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="home">
             <div id="merchant" style="width: 300px; margin: 20px auto;">
-                <form action="/merchant/register" method="post" accept-charset="UTF-8">
+                <form action="${ctx}/student/update" method="post" accept-charset="UTF-8">
                     <input type="hidden" name="id" value="<%=merchant.getId()%>">
+                    <input type="hidden" name="realName" value="<%=merchant.getRealName()%>">
+                    <input type="hidden" name="stuNum" value="<%=merchant.getStuNum()%>">
                     <div class="form-group">
-                        <label for="userName">姓名</label>
-                        <input type="text" name="realName" disabled class="form-control" id="userName"
+                        <label for="realName2">姓名</label>
+                        <input type="text" name="realName2" disabled class="form-control" id="realName2"
                                value="<%=merchant.getRealName()%>">
                     </div>
 
                     <div class="form-group">
-                        <label for="email">学号</label>
-                        <input type="email" name="stuNum" disabled class="form-control" id="email"
+                        <label for="stuNum2">学号</label>
+                        <input type="text" name="stuNum2" disabled class="form-control" id="stuNum2"
                                value="<%=merchant.getStuNum()%>">
                     </div>
 
@@ -99,14 +117,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="wechat">微信</label>
-                        <input type="text" name="birth" class="form-control" id="wechat"
+                        <label for="weChat">微信</label>
+                        <input type="text" name="weChat" class="form-control" id="weChat"
                                value="<%=merchant.getWeChat()%>">
                     </div>
 
                     <div class="form-group">
                         <label for="qq">QQ</label>
-                        <input type="text" name="birth" class="form-control" id="qq"
+                        <input type="text" name="qq" class="form-control" id="qq"
                                value="<%=merchant.getQq()%>">
                     </div>
 
@@ -117,20 +135,40 @@
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="profile" style="padding-top: 10px;">
-            <table id="tradeTable" class="table table-striped table-hover table-bordered">
-                <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>交易时间</td>
-                    <td>状态</td>
-                    <td>进度</td>
-                    <td>操作</td>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div>租出</div>
+                    <table id="tradeTableFrom" class="table table-striped table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>时间</td>
+                            <td>单位</td>
+                            <td>总价</td>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div>租入</div>
+                    <table id="tradeTableTo" class="table table-striped table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>时间</td>
+                            <td>单位</td>
+                            <td>总价</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="profile2" style="padding-top: 10px;">
             <div>
@@ -143,7 +181,7 @@
                 <div style="clear: both;"></div>
             </div>
             <div>
-                <ul class="list-group" id="programmes">
+                <ul class="list-group" id="goods">
 
                 </ul>
             </div>
@@ -186,11 +224,13 @@
                                         <input type="text" id="price" name="price" class="form-control"
                                                aria-label="...">
                                         <div class="input-group-btn" style="width: 149px;">
-                                            <button type="button" class="btn btn-default" style="width: 50px;">/</button>
+                                            <button type="button" class="btn btn-default" style="width: 50px;">/
+                                            </button>
                                             <%--<button type="button" class="btn btn-default dropdown-toggle"--%>
-                                                    <%--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--%>
-                                                <%--Action <span class="caret"></span></button>--%>
-                                            <select name="timeUnit" class="form-control" style="border-left: none; float: right; width: 100px; border-bottom-right-radius: 4px; border-top-right-radius: 4px;">
+                                            <%--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--%>
+                                            <%--Action <span class="caret"></span></button>--%>
+                                            <select name="timeUnit" class="form-control"
+                                                    style="border-left: none; float: right; width: 100px; border-bottom-right-radius: 4px; border-top-right-radius: 4px;">
                                                 <option value="0">小时</option>
                                                 <option value="1">天</option>
                                                 <option value="2">周</option>
@@ -236,6 +276,7 @@
 <script>
     $(function () {
         loadTrades();
+        loadGoods();
         $("#file").change(function () {
             var files = this.files;
             var length = files.length;
@@ -257,35 +298,34 @@
         })
     });
 
+    function loadGoods() {
+        $.post("/good/goods", {"studentId": <%=session.getAttribute("id")%>}, function (data) {
+            console.log('- loadGoods -');
+            console.log(data);
+            if (data.code === 1) {
+                for (var i = 0; i < data.data.length; i++) {
+                    $("#goods").append('<li class="list-group-item" id="' + data.data[i].id + '"><div class="media">\n' +
+                        '                <div class="media-left">\n' +
+                        '                    <a href="#">\n' +
+                        '                        <img class="media-object" style="width: 96px;" src="${ctx}/resource/uploadImg/' + data.data[i].img.split(",")[0] + '" alt="...">\n' +
+                        '                    </a>\n' +
+                        '                </div>\n' +
+                        '                <div class="media-body">\n' +
+                        '                    <h4 class="media-heading">' + "【" + data.data[i].type + "】 " + data.data[i].name + " " + data.data[i].old + " " + data.data[i].title + ' - ¥' + data.data[i].price + " / " + (data.data[i].timeUnit === 0 ? "小时" : data.data[i].timeUnit === 1 ? "天" : data.data[i].timeUnit === 2 ? "周" : data.data[i].timeUnit === 3 ? "月" : "年") + '</h4><button class="btn btn-danger" style="float: right;" onclick="deleteGood(\'' + data.data[i].id + '\')">下架</button>\n' +
+                        '                    ' + data.data[i].content + '\n' +
+                        '                </div>\n' +
+                        '            </div></li>')
+                }
+            }
+        });
+    }
+
     function loadTrades() {
         $.post("${ctx}/student/tradesFrom", function (data) {
             console.log(data);
             if (data.code === 1) {
                 for (var i = 0; i < data.data.length; i++) {
-                    $("#tradeTable tbody").append('<tr id="' + data.data[i].id + '">\n' +
-                        '                    <td style="vertical-align: middle;"><a href="/trade/detial?id=' + data.data[i].id + '">' + data.data[i].id + '\n' +
-                        '                    </a></td>\n' +
-                        '                    <td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].buyDate)).toLocaleString().replace(/:\d{1,2}$/, ' ') + '\n' +
-                        '                    </td>\n' +
-                        '                    <td style="vertical-align: middle;">' + (data.data[i].state === "buy" ? "等待施工" : data.data[i].state === "start" ? "正在施工" : data.data[i].state === "end" ? "等待质检" : data.data[i].state === "finish" || data.data[i].state === "finished" ? "交易完成" : "质检失败") + '\n' +
-                        '                    </td>\n' +
-                        '                    <td style="vertical-align: middle;">\n' +
-                        '                        <div class="progress" style="width: 400px; margin: auto;">\n' +
-                        '                            <div class="progress-bar progress-bar-' + (data.data[i].state === "finish" || data.data[i].state === "finished" ? "success" : "warning active") + ' progress-bar-striped"\n' +
-                        '                                 role="progressbar"\n' +
-                        '                                 aria-valuenow="75" aria-valuemin="0"\n' +
-                        '                                 aria-valuemax="100"\n' +
-                        '                                 style="width: ' + (data.data[i].state === "buy" || data.data[i].state === "unfinish" ? "15" : data.data[i].state === "start" ? "75" : data.data[i].state === "end" ? "90" : "100") + '%">\n' +
-                        '                                <span class="sr-only">45% Complete</span>\n' +
-                        '                            </div>\n' +
-                        '                        </div>\n' +
-                        '                    </td>\n' +
-                        '                    <td>\n' +
-                        '                        <div class="form-group" style="margin: auto;">\n' +
-                        '                            ' + ((data.data[i].state === "buy" || data.data[i].state === "unfinish" ? '<button class="btn btn-info startTrade" onclick="trade(\'' + data.data[i].id + '\', \'start\')" value="' + data.data[i].id + '">开始施工</button>' : data.data[i].state === "start" ? '<button class="btn btn-info yesTrade" onclick="trade(\'' + data.data[i].id + '\', \'end\')\" value=\"' + data.data[i].id + '\">结束施工</button>' : "")) + '\n' +
-                        '                        </div>\n' +
-                        '                    </td>\n' +
-                        '                </tr>')
+                    $("#tradeTableFrom tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;">' + data.data[i].id + '</td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
                 }
             }
         });
@@ -293,33 +333,24 @@
             console.log(data);
             if (data.code === 1) {
                 for (var i = 0; i < data.data.length; i++) {
-                    $("#tradeTable tbody").append('<tr id="' + data.data[i].id + '">\n' +
-                        '                    <td style="vertical-align: middle;"><a href="/trade/detial?id=' + data.data[i].id + '">' + data.data[i].id + '\n' +
-                        '                    </a></td>\n' +
-                        '                    <td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].buyDate)).toLocaleString().replace(/:\d{1,2}$/, ' ') + '\n' +
-                        '                    </td>\n' +
-                        '                    <td style="vertical-align: middle;">' + (data.data[i].state === "buy" ? "等待施工" : data.data[i].state === "start" ? "正在施工" : data.data[i].state === "end" ? "等待质检" : data.data[i].state === "finish" || data.data[i].state === "finished" ? "交易完成" : "质检失败") + '\n' +
-                        '                    </td>\n' +
-                        '                    <td style="vertical-align: middle;">\n' +
-                        '                        <div class="progress" style="width: 400px; margin: auto;">\n' +
-                        '                            <div class="progress-bar progress-bar-' + (data.data[i].state === "finish" || data.data[i].state === "finished" ? "success" : "warning active") + ' progress-bar-striped"\n' +
-                        '                                 role="progressbar"\n' +
-                        '                                 aria-valuenow="75" aria-valuemin="0"\n' +
-                        '                                 aria-valuemax="100"\n' +
-                        '                                 style="width: ' + (data.data[i].state === "buy" || data.data[i].state === "unfinish" ? "15" : data.data[i].state === "start" ? "75" : data.data[i].state === "end" ? "90" : "100") + '%">\n' +
-                        '                                <span class="sr-only">45% Complete</span>\n' +
-                        '                            </div>\n' +
-                        '                        </div>\n' +
-                        '                    </td>\n' +
-                        '                    <td>\n' +
-                        '                        <div class="form-group" style="margin: auto;">\n' +
-                        '                            ' + ((data.data[i].state === "buy" || data.data[i].state === "unfinish" ? '<button class="btn btn-info startTrade" onclick="trade(\'' + data.data[i].id + '\', \'start\')" value="' + data.data[i].id + '">开始施工</button>' : data.data[i].state === "start" ? '<button class="btn btn-info yesTrade" onclick="trade(\'' + data.data[i].id + '\', \'end\')\" value=\"' + data.data[i].id + '\">结束施工</button>' : "")) + '\n' +
-                        '                        </div>\n' +
-                        '                    </td>\n' +
-                        '                </tr>')
+                    $("#tradeTableTo tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;">' + data.data[i].id + '</td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
                 }
             }
         });
+    }
+
+    function deleteGood(id) {
+        console.log(id);
+//        $.post("/good/delete",
+//            {"id": id},
+//            function (data) {
+//                console.log(data);
+//                if (data.code === 1) {
+//                    $("#" + id).remove()
+//                }
+//            },
+//            "json"
+//        );
     }
 </script>
 </body>

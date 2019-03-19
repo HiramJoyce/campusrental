@@ -1,7 +1,9 @@
 package com.campus.rental.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.campus.rental.domain.Good;
 import com.campus.rental.domain.Result;
+import com.campus.rental.domain.Student;
 import com.campus.rental.domain.Trade;
 import com.campus.rental.domain.enums.ResultEnum;
 import com.campus.rental.service.GoodService;
@@ -11,12 +13,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("trade")
@@ -44,20 +48,12 @@ public class TradeController {
         if (good == null) {
             return ResultUtil.error(ResultEnum.ERROR);
         }
-        System.out.println("---");
-        System.out.println(good);
-        System.out.println("---");
         Trade trade = new Trade();
-        System.out.println(goodId);
         trade.setGoodId(goodId);
-        System.out.println(fromId);
         trade.setFromId(fromId);
-        System.out.println((String) request.getSession().getAttribute("id"));
         trade.setToId((String) request.getSession().getAttribute("id"));
         trade.setRentTime(new Date());
-        System.out.println(good.getPrice() * Double.valueOf(rentLast));
         trade.setTotal(good.getPrice() * Double.valueOf(rentLast));
-        System.out.println(Double.valueOf(rentLast));
         trade.setRentLast(Double.valueOf(rentLast));
         logger.info(trade);
         return tradeService.createTrade(trade);
@@ -73,5 +69,35 @@ public class TradeController {
         request.setAttribute("trade", trade);
         request.setAttribute("good", good);
         return "trade/index";
+    }
+
+    @RequestMapping("/manage")
+    public String manage(Model model, HttpServletRequest request) {
+        String id = (String) request.getSession().getAttribute("id");
+        String role = (String) request.getSession().getAttribute("role");
+        if (id == null || !StringUtils.equals(role, "admin")) {
+//            model.addAttribute("error", "请检查登录状态或权限");
+            return "redirect:/";
+        }
+        List<Trade> trades = tradeService.getAllTrades();
+        model.addAttribute("trades", trades);
+        return "trade/manage";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(String id, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        if (id != null) {
+            String ids[] = id.split(",");
+            for (String id1 : ids) {
+                tradeService.deleteTradeById(id1);
+            }
+        }
+        List<Trade> trades = tradeService.getAllTrades();
+        model.addAttribute("trades", trades);
+        model.addAttribute("message", "删除成功！");
+        return "trade/manage";
     }
 }

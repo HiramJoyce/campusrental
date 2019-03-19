@@ -63,4 +63,9 @@ public class GoodServiceImpl implements GoodService {
     public List<Good> searchWord(String word) {
         return goodDao.selectTitleByWord(word);
     }
+
+    @Override
+    public int setGoodState(String id, String state) {
+        return goodDao.setGoodState(id, state);
+    }
 }

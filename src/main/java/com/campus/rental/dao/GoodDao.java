@@ -1,6 +1,7 @@
 package com.campus.rental.dao;
 
 import com.campus.rental.domain.Good;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface GoodDao {
     int deleteGoodsByStudentId(String studentId);
 
     List<Good> selectTitleByWord(String word);
+
+    int setGoodState(@Param("id") String id, @Param("state") String state);
 }

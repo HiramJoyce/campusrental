@@ -12,7 +12,5 @@ public interface TradeDao {
     List<Trade> selectTradesByFromStudentId(String fromId);
     List<Trade> selectTradesByToStudentId(String toId);
     List<Trade> selectAllTrades();
-//    int insertStudent(Student student);
-//    int deleteStudent(String id);
-//    int updateStudent(Student student);
+    int deleteTradeById(String id);
 }

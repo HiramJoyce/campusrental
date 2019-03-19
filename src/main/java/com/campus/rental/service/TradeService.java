@@ -17,5 +17,6 @@ public interface TradeService {
 //    List<Trade> getEndTrade();
 //    Result endTrade();
 //    Result rate(String userId, String tradeId, String rate, String comment);
-    Result getAllTrades();
+    List<Trade> getAllTrades();
+    int deleteTradeById(String id);
 }

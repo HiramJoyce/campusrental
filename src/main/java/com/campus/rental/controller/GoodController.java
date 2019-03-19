@@ -1,19 +1,27 @@
 package com.campus.rental.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.campus.rental.domain.Good;
+import com.campus.rental.domain.Result;
+import com.campus.rental.domain.Student;
 import com.campus.rental.service.GoodService;
+import com.campus.rental.util.ResultUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -57,8 +65,8 @@ public class GoodController {
         good.setQq(request.getParameter("qq"));
         good.setPrice(Double.valueOf(request.getParameter("price")));
         good.setTimeUnit(Integer.parseInt(request.getParameter("timeUnit")));
-        good.setCreateTIme(new Date());
-        good.setState(0);
+        good.setCreateTime(new Date());
+        good.setState(1);
         good.setStudentId((String) request.getSession().getAttribute("id"));
         System.out.println(good.toString());
         if (goodService.createGood(good) != null) {
@@ -69,7 +77,7 @@ public class GoodController {
         }
     }
 
-    //    @RequestMapping( value = "search", produces = "application/json;charset=UTF-8")
+//        @RequestMapping( value = "search", produces = "application/json;charset=UTF-8")
 //    @ResponseBody
 //    public Result search(String word) {
 ////        String word = new String(request.getParameter("word").getBytes(StandardCharsets.ISO_8859_1) , StandardCharsets.UTF_8);
@@ -79,7 +87,16 @@ public class GoodController {
 ////        request.setAttribute("programmes", programmes);
 //        return programmes != null ? ResultUtil.success(programmes) : ResultUtil.error("No data!");
 //    }
-//
+
+    @RequestMapping( value = "goods", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result search(String studentId) {
+        System.out.println("-> good -> goods -> " + studentId);
+        List<Good> goods = goodService.getGoodsByStudentId(studentId);
+        return goods != null ? ResultUtil.success(goods) : ResultUtil.error("No data!");
+    }
+
+
     @RequestMapping("item")
     public String programmeItem(String id, HttpServletRequest request) {
         System.out.println("--->>> item : " + id);
@@ -91,16 +108,124 @@ public class GoodController {
         }
         return "404";
     }
-//
-//    @RequestMapping( value = "delete", produces = "application/json;charset=UTF-8")
-//    @ResponseBody
-//    public Result deleteProgramme(String id) {
-//        return programmeService.deleteProgramme(id);
-//    }
-//
-//    @RequestMapping( value = "allowProgrammes", produces = "application/json;charset=UTF-8")
-//    @ResponseBody
-//    public Result allowProgrammes() {
-//        return ResultUtil.success(programmeService.getAllAllowedProgrammes());
-//    }
+
+    @RequestMapping("/delete")
+    public String delete(String id, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        if (id != null) {
+            String ids[] = id.split(",");
+            for (String id1 : ids) {
+                goodService.deleteGood(id1);
+            }
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        model.addAttribute("message", "删除成功！");
+        return "good/manage";
+    }
+
+    @RequestMapping("/allow")
+    public String allow(String id, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        if (id != null) {
+            String ids[] = id.split(",");
+            for (String id1 : ids) {
+                goodService.setGoodState(id1, "1");
+            }
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        model.addAttribute("message", "已通过！");
+        return "good/manage";
+    }
+
+    @RequestMapping("/notAllow")
+    public String notAllow(String id, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        if (id != null) {
+            String ids[] = id.split(",");
+            for (String id1 : ids) {
+                goodService.setGoodState(id1, "0");
+            }
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        model.addAttribute("message", "已禁止！");
+        return "good/manage";
+    }
+
+    @RequestMapping( value = "delete", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result deleteProgramme(String id) {
+        return goodService.deleteGood(id);
+    }
+
+    @RequestMapping("/manage")
+    public String manage(Model model, HttpServletRequest request) {
+        String id = (String) request.getSession().getAttribute("id");
+        String role = (String) request.getSession().getAttribute("role");
+        if (id == null || !StringUtils.equals(role, "admin")) {
+            model.addAttribute("error", "请检查登录状态或权限");
+            return "redirect:/";
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        return "good/manage";
+    }
+
+    @RequestMapping("/update")
+    public String updateGood(String id, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        Good good = goodService.getGoodById(id);
+        if (good != null) {
+            model.addAttribute("good", good);
+            return "good/update";
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        model.addAttribute("error", "商品信息错误！");
+        return "good/manage";
+    }
+
+    @RequestMapping("/add")
+    public String addGood(Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        Good good = new Good();
+        model.addAttribute("good", good);
+        return "good/update";
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updateGood(Good good, Model model, HttpServletRequest request) {
+        if (request.getSession().getAttribute("role") == null || !request.getSession().getAttribute("role").equals("admin")) {
+            return "404";
+        }
+        System.out.println("-> updateGood ->");
+        System.out.println(good);
+        if (good.getId() == null || StringUtils.equals(good.getId(), "")) {
+            good.setCreateTime(new Date());
+            if (goodService.createGood(good) != null) {
+                model.addAttribute("message", "商品信息添加成功！");
+            } else {
+                model.addAttribute("error", "商品信息添加失败！");
+            }
+        } else if (goodService.updateGood(good) != null) {
+            model.addAttribute("message", "商品信息修改成功！");
+        } else {
+            model.addAttribute("error", "商品信息修改失败！");
+        }
+        List<Good> goods = goodService.getAllGoods();
+        model.addAttribute("goods", goods);
+        return "good/manage";
+    }
 }

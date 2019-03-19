@@ -43,4 +43,8 @@
     <update id="updateStudent" parameterType="com.campus.rental.domain.Student">
         update student set phone=#{phone}, wechat=#{weChat}, qq=#{qq}, password=#{password} where id=#{id}
     </update>
+
+    <update id="updateStudentAll" parameterType="com.campus.rental.domain.Student">
+        update student set stu_num=#{stuNum}, real_name=#{realName}, phone=#{phone}, wechat=#{weChat}, qq=#{qq}, password=#{password} where id=#{id}
+    </update>
 </mapper>
