@@ -6,7 +6,7 @@
     <title>首页</title>
     <link type="text/css" rel="stylesheet" href="${ctx}/resource/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
 </head>
-<body>
+<body style="background: url('${ctx}/resource/imgs/Sports.png')">
 <nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
@@ -118,6 +118,6 @@
 </div>
 <script src="${ctx}/resource/js/jquery-3.2.1.min.js"></script>
 <script src="${ctx}/resource/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="${ctx}/resource/js/canvas-nest.js"></script>
+<!-- <script src="${ctx}/resource/js/canvas-nest.js"></script> -->
 </body>
 </html>
