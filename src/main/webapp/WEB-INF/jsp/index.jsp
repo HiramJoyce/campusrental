@@ -7,9 +7,11 @@
 <head>
     <title>首页</title>
     <link type="text/css" rel="stylesheet" href="${ctx}/resource/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" href="${ctx}/resource/css3-3d-retro-button/css/style.css"/>
 </head>
 <body style="background: url('${ctx}/resource/imgs/Sports.png')">
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" style="background-color: #2F2F2F; border-radius: 0; margin: -1px;">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -19,7 +21,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">校园二手租赁平台</a>
+            <div class="wrapper" style="margin-top: -24px;">
+                <div class="header-wrap">
+                    <h1>校园二手租赁平台</h1>
+                </div>
+            </div>
+            <%--<a class="navbar-brand" href="/">校园二手租赁平台</a>--%>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
@@ -27,11 +34,34 @@
                     <%
                         if (session.getAttribute("id") == null) {
                     %>
-                    <div class="btn-group" role="group" aria-label="...">
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
-                           data-target="#myModal">登录</a>
-                        <a type="button" class="btn btn-link navbar-btn" data-toggle="modal"
-                           data-target="#myModal2">注册</a>
+                    <div class='wrapper' id="loginButton">
+                        <div role='button' class='retro-btn sm success'>
+                            <a class='btn-retro'>
+                              <span class='btn-retro-inner'>
+                                <span class='content-wrapper'>
+                                  <span class='btn-retro-content'>
+                                    <span class='btn-retro-content-inner' label='登录'>
+                                    </span>
+                                  </span>
+                                </span>
+                              </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class='wrapper' id="registerButton">
+                        <div role='button' class='retro-btn sm info'>
+                            <a class='btn-retro'>
+                              <span class='btn-retro-inner'>
+                                <span class='content-wrapper'>
+                                  <span class='btn-retro-content'>
+                                    <span class='btn-retro-content-inner' label='注册'>
+                                    </span>
+                                  </span>
+                                </span>
+                              </span>
+                            </a>
+                        </div>
                     </div>
                     <%
                     } else {
@@ -51,7 +81,7 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<div class="container">
+<div class="container" style="padding-top: 10px;">
     <div style="margin: auto; width: 350px;">
         <c:if test="${message != null}">
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -179,6 +209,17 @@
 </div>
 <script src="${ctx}/resource/js/jquery-3.2.1.min.js"></script>
 <script src="${ctx}/resource/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script  src="${ctx}/resource/css3-3d-retro-button/js/index.js"></script>
 <!-- <script src="${ctx}/resource/js/canvas-nest.js"></script> -->
+<script>
+    $(function () {
+        $("#loginButton").click(function () {
+            $('#myModal').modal('toggle')
+        })
+        $("#registerButton").click(function () {
+            $('#myModal2').modal('toggle')
+        })
+    })
+</script>
 </body>
 </html>

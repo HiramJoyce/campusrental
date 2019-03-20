@@ -26,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Lawyer Online</a>
+            <a class="navbar-brand" href="${ctx}/">校园二手租赁平台</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td>商品标题</td>
-                <td><%=good != null ? good.getTitle() : "方案已下架"%></td>
+                <td><%=good != null ? good.getTitle() : "商品已下架"%></td>
             </tr>
             <tr>
                 <td>租赁单位</td>
@@ -78,7 +78,7 @@
             </tr>
             <tr>
                 <td>单价</td>
-                <td><%=good != null ? good.getPrice() : "方案已下架"%></td>
+                <td><%=good != null ? good.getPrice() : "商品已下架"%></td>
             </tr>
             <tr>
                 <td>总价</td>

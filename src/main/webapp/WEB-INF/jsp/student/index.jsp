@@ -325,7 +325,7 @@
             console.log(data);
             if (data.code === 1) {
                 for (var i = 0; i < data.data.length; i++) {
-                    $("#tradeTableFrom tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;">' + data.data[i].id + '</td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
+                    $("#tradeTableFrom tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;"><a href="${ctx}/trade/item?id=' + data.data[i].id + '">' + data.data[i].id + '</a></td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
                 }
             }
         });
@@ -333,7 +333,7 @@
             console.log(data);
             if (data.code === 1) {
                 for (var i = 0; i < data.data.length; i++) {
-                    $("#tradeTableTo tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;">' + data.data[i].id + '</td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
+                    $("#tradeTableTo tbody").append('<tr id="' + data.data[i].id + '"><td style="vertical-align: middle;"><a href="${ctx}/trade/item?id=' + data.data[i].id + '">' + data.data[i].id + '</a></td><td style="vertical-align: middle;">' + new Date(parseInt(data.data[i].rentTime)).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td><td style="vertical-align: middle;">' + data.data[i].rentLast + '</td><td style="vertical-align: middle;">' + data.data[i].total + '</td></tr>')
                 }
             }
         });

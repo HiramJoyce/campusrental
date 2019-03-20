@@ -66,7 +66,7 @@ public class GoodController {
         good.setPrice(Double.valueOf(request.getParameter("price")));
         good.setTimeUnit(Integer.parseInt(request.getParameter("timeUnit")));
         good.setCreateTime(new Date());
-        good.setState(1);
+        good.setState(0);
         good.setStudentId((String) request.getSession().getAttribute("id"));
         System.out.println(good.toString());
         if (goodService.createGood(good) != null) {
